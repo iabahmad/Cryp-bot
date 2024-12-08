@@ -1,0 +1,249 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Model Details</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+        <style>
+            body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f1f3;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+            .p2 {
+                margin-right: 2% !important;
+            }
+            .p1 {
+                margin-left: 2% !important;
+            }
+            .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #e2e4e5;
+            color: rgb(71,71,71);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+            .navbar a {
+                color: rgb(71,71,71);
+                text-decoration: none;
+                font-size: 1rem;
+                margin-right: 20px;
+                font-weight: 500;
+            }
+
+            .navbar h1 {
+                margin: 0;
+                font-size: 1.5rem;
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            .container {
+                margin-top: 80px; /* Adjusted margin to account for fixed navbar */
+            }
+
+            .chart-container {
+            width: 50%; /* Set width to 50% for each chart */
+            height: 300px; /* Set height for the chart */
+        }
+        .chart-row {
+            display: flex; /* Use flexbox to arrange charts side by side */
+            justify-content: center; /* Center the charts */
+            margin: 20px 0; /* Add some margin */
+        }
+
+            #chartContainer {
+                width: 90%; /* Set width to 80% */
+                height: 100%; /* Set height to 100% */
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                background-color: #fff;
+            }
+
+            .card-deck {
+                margin: 20px auto;
+                display: flex;
+                justify-content: center;
+            }
+
+            .card {
+                flex: 1;
+                margin: 0 10px;
+                max-width: 300px; /* Set maximum width for the card */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                background-color: #e2e4e5;
+            }
+
+            .card-body {
+                padding: 10px; /* Reduced padding */
+                
+            }
+
+            .card-title {
+                font-size: 1.25rem;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+            .card-text {
+                font-size: 0.9rem; /* Reduced font size */
+                margin-bottom: 10px;
+                /* text-justify: auto; */
+            display: flex !important;
+            align-items: right;
+
+                }
+
+            footer {
+                text-align: center;
+                padding: 15px 0;
+                background-color: #2c3e50;
+                color: white;
+                position: sticky;
+                width: 100%;
+                bottom: 0;
+                font-size: 0.9rem;
+                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            @media (max-width: 768px) {
+                .card-deck {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .card {
+                    margin: 10px 0;
+                    max-width: 100%; /* Allow full width for small screens */
+                }
+                table {
+                    width: 100%;
+                }
+                th, td {
+                    font-size: 0.9rem;
+                    padding: 12px;
+                }
+                h1 {
+                    font-size: 1.5rem;
+                }
+                .navbar {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+            <a href="/">Home/{{ model_name }}</a>
+        </div>
+    
+        <div class="container">
+            <div class="chart-row">
+                <div id="pnlChartContainer" class="chart-container"></div>
+                <div id="cumPnlChartContainer" class="chart-container"></div>
+            </div>
+            <div class="card-deck">
+                {% set keys = stats.keys() | list %}
+                {% set chunk_size = (keys | length / 3) | round(0, 'ceil') %}
+                {% set chunks = keys | batch(chunk_size) %}
+    
+                {% for chunk in chunks %}
+                    <div class="card">
+                        <div class="card-body" style="text-align: justify;">
+                            <h5 class="card-title">Attributes</h5>
+                            {% for key in chunk %}
+                                <div class="card-text">
+                                    <div class="p1"><strong>{{ key }}:</strong></div>
+                                    <div class="p2">{{ stats[key] }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    
+        <script type="text/javascript">
+            var pnlData = {{ pnl|tojson }};
+            var cumPnlData = {{ cum_pnl|tojson }}; // Add this line to get cumulative PnL
+            var dates = {{ dates|tojson }};  // Add this line to get dates
+    
+            window.onload = function () {
+                // PnL Chart
+                var pnlChart = new CanvasJS.Chart("pnlChartContainer", {
+                    theme: "light2",
+                    animationEnabled: true,
+                    zoomEnabled: true,
+                    title: {
+                        text: "PnL"
+                    },
+                    axisX: {
+                        title: "Date",
+                        interval: 1,
+                        valueFormatString: "DD MMM",
+                        labelAngle: -30
+                    },
+                    data: [{
+                        type: "area",
+                        dataPoints: []
+                    }]
+                });
+    
+                // Cumulative PnL Chart
+                var cumPnlChart = new CanvasJS.Chart("cumPnlChartContainer", {
+                    theme: "light2",
+                    animationEnabled: true,
+                    zoomEnabled: true,
+                    title: {
+                        text: "Cumulative PnL"
+                    },
+                    axisX: {
+                        title: "Date",
+                        interval: 1,
+                        valueFormatString: "DD MMM",
+                        labelAngle: -30
+                    },
+                    data: [{
+                        type: "area",
+                        dataPoints: []
+                    }]
+                });
+    
+                function populateChart(chart, data, dates) {
+                    var dataPoints = [];
+                    for (var i = 0; i < data.length; i++) {
+                        dataPoints.push({ x: new Date(dates[i]), y: data[i] });  // Use the date for x-axis
+                    }
+                    chart.options.data[0].dataPoints = dataPoints;
+                    chart.render();
+                }
+    
+                populateChart(pnlChart, pnlData, dates);  // Pass PnL data
+                populateChart(cumPnlChart, cumPnlData, dates);  // Pass cumulative PnL data
+            }
+        </script>
+    
+    </body>
+    </html>

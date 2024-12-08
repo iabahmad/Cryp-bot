@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #a7c6ed, #bcd0f7);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #4A4A4A;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s;
+      font-size: 1em;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus {
+      border-color: #6b5fce;
+      outline: none;
+    }
+
+    input[type="submit"], .close-all-button {
+      background-color: #6b5fce;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1em;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    input[type="submit"]:hover, .close-all-button:hover {
+      background-color: #5a4bbd;
+    }
+
+    .error-message {
+      color: red;
+      margin: 10px 0;
+    }
+
+    .success-message {
+      color: green;
+      margin: 10px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #333;
+      font-weight: bold;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+    
+    tbody tr:nth-child(even) {
+      background-color: #fff;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        width: 90%;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Place Trade</h1>
+    <form action="/trade" method="post" style="padding: 2%;">
+      <input type="text" name="symbol" placeholder="Symbol (e.g. BTCUSDT)"  required>
+      <input type="text" name="side" placeholder="Side (BUY/SELL)"  required>
+      <input type="number" name="quantity" placeholder="Quantity"  required step="0.001">
+      <input type="submit" value="Open Trade">
+    </form>
+    <form action="/close_all_trades" method="post">
+      <button type="submit" class="close-all-button">Close All Trades</button>
+    </form>
+  </div>
+  <div>
+    <h2>Your Trades</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Side</th>
+          <th>Entry Price</th>
+          <th>Exit Price</th>
+          <th>PnL</th>
+          <th>% PnL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for trade in trades %}
+        <tr>
+          <td>{{ trade.Symbol }}</td>
+          <td>{{trade.Side}}</td>
+          <td>{{ trade['Entry Price'] }}</td>
+          <td>{{ trade['Exit Price'] }}</td>
+          <td>{{ trade.PNL }}</td>
+          <td>{{ trade['PNL %'] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
