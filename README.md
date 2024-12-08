@@ -1,0 +1,1 @@
+# Crypbot, A trading bot
